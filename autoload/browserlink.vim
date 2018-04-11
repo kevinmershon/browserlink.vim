@@ -49,7 +49,7 @@ endfunction
 function! browserlink#getConsole()
 	normal ggdG
 python3 <<EOF
-data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/console").read()
+data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/console").read().decode()
 for line in data.split("\n"):
 	vim.current.buffer.append(line)
 EOF
@@ -58,6 +58,14 @@ EOF
 	nnoremap <buffer> cc :BLConsoleClear<cr>:e<cr>
 	nnoremap <buffer> r :e!<cr>
 	nnoremap <buffer> <cr> :BLTraceLine<cr>
+endfunction
+
+function! browserlink#getNetSuiteLogs()
+python3 <<EOF
+data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read().decode()
+vim.command("let netsuitelogs = \"%s\"" % data)
+EOF
+  echo netsuitelogs
 endfunction
 
 function! browserlink#url2path(url)

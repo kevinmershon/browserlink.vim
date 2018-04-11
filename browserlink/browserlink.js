@@ -19,6 +19,8 @@ var path = require("path");
 
 var connections = [];
 
+var netSuiteLogs = "";
+
 var consoles = "";
 var errors   = [];
 var errorMultiplicities = {};
@@ -62,6 +64,13 @@ var server = http.createServer(function(request, response) {
 			response.writeHead(200);
 			response.end(consoles);
 			return;
+    case "netsuite":
+      response.writeHead(200);
+      response.end(netSuiteLogs);
+      return;
+    case "clearNetSuite":
+      netSuiteLogs = "";
+      break;
 		case "clear":
 			consoles = "";
 			break;
@@ -100,6 +109,9 @@ wsServer.on('request', function(request) {
 		case 'log':
 			consoles += content.message + "\n" + content.stacktrace + "\n\n";
 			break;
+    case 'netsuite':
+      netSuiteLogs += content.message.description.toUpperCase() + " -- " + content.message.details + "\n";
+      break;
 		case 'error':
 			if (errorMultiplicities.hasOwnProperty(content)) {
 				errorMultiplicities[content] += 1;
