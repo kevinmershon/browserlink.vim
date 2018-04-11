@@ -1,16 +1,6 @@
-# Looking for a new owner
-
-This plugin was much fun to build but it clearly needs more love than I am able to devote right now. If someone would like to take ownership of the project, email me or file a bug.
-
-# Browserlink.vim
-Browserlink is a live browser editing plugin for Vim.
+# NetSuite Browserlink
+Based on the Browserlink.vim plugin, this is a live browser debugger plugin for NetSuite via Vim.
 <img src='http://jaxbot.me/pics/browserlink_html.gif'>
-
-## Live edit CSS
-
-Browserlink allows you to live edit CSS files, which are sent to the browser on change, without reloading or changing the state of the page.
-
-<img src='http://jaxbot.me/pics/brolinkcss.gif'>
 
 ## Live evaluate JavaScript
 
@@ -37,7 +27,7 @@ Browserlink is very simple. The plugin itself hooks autocommands for file change
 To install, either download the repo, or as I would recommend, use [Pathogen](https://github.com/tpope/vim-pathogen).
 
 ```
-git clone git://github.com/jaxbot/browserlink.vim.git
+git clone git://github.com/kevinmershon/netsuite-browserlink.vim
 ```
 
 If you haven't already, you'll need to install [Node.js](http://nodejs.org/) (Node is used to send refresh commands to your page(s))
@@ -60,18 +50,26 @@ Userscript injection extensions/solutions:
 Userscript template (update the [@match rule](https://developer.chrome.com/extensions/match_patterns) to the url of your local project):
 ```
 // ==UserScript==
-// @name       Browserlink Embed
-// @namespace  http://use.i.E.your.homepage/
-// @version    0.1
-// @description  enter something useful
-// @match      http://localhost/*
-// @copyright  2012+, You
+// @name         NetSuite Browserlink
+// @namespace    NetSuiteLink
+// @include      *
+// @description  Vim BrowserLink remote debugging of NetSuite
+// @match        https://*.netsuite.com/app/common/scripting/scriptdebugger.nl*
+// @author       Kevin Mershon
 // ==/UserScript==
 
-var src = document.createElement("script");
-src.src = "http://127.0.0.1:9001/js/socket.js";
-src.async = true;
-document.head.appendChild(src);
+var socketSrc = document.createElement("script");
+socketSrc.src = "http://127.0.0.1:9001/js/socket.js";
+socketSrc.async = true;
+document.head.appendChild(socketSrc);
+
+var netSuiteSrc = document.createElement("script");
+netSuiteSrc.src = "http://127.0.0.1:9001/js/netsuite.js";
+netSuiteSrc.async = true;
+document.head.appendChild(netSuiteSrc);
+
+console.log('%c -> NetSuite Browserlink enabled', 'color: red; font-weight: bold');
+
 ```
 
 I prefer the GreaseMonkey/Userscript method, as it's more universal and I don't have extra development junk in my projects. But it's totally up to you.
@@ -85,10 +83,6 @@ In addition:
 `:BLReloadPage`
 
 will reload the current pages
-
-`:BLReloadCSS`
-
-will reload the current stylesheets
 
 `:BLEvaluateBuffer`
 
@@ -156,7 +150,3 @@ Defaults to `['html', 'javascript', 'php']`.
 ## Notes
 
 This is an experimental project, but it works really well for me, and I hope you enjoy it! I kept the source as simple as possible, and it's pretty easy to edit to your needs. I'm open to any suggestions, too, so let me know.
-
-## Shameless plug
-
-I hack around with Vim plugins, so [follow me](https://github.com/jaxbot) if you're into that kind of stuff (or just want to make my day) ;)

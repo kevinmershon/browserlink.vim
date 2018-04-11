@@ -1,9 +1,9 @@
 let s:path = expand('<sfile>:p:h:h')
 
-python <<NOMAS
+python3 <<NOMAS
 import sys
 import time
-import urllib2
+import urllib.request as urllib2
 import vim
 import os
 import subprocess
@@ -22,11 +22,11 @@ function! browserlink#EvaluateWord()
 endfunction
 
 function! browserlink#evaluateJS(js)
-	python urllib2.urlopen(urllib2.Request(vim.eval("g:bl_serverpath") + "/evaluate", vim.eval("a:js")))
+	python3 urllib2.urlopen(urllib2.Request(vim.eval("g:bl_serverpath") + "/evaluate", ("runScript(\""+vim.eval("a:js").replace('"','\\"')+"\")").encode()))
 endfunction
 
 function! browserlink#sendCommand(command)
-	python <<EOF
+	python3 <<EOF
 try:
 	urllib2.urlopen(vim.eval("g:bl_serverpath") + "/" + vim.eval("a:command")).read()
 except:
@@ -48,7 +48,7 @@ endfunction
 
 function! browserlink#getConsole()
 	normal ggdG
-python <<EOF
+python3 <<EOF
 data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/console").read()
 for line in data.split("\n"):
 	vim.current.buffer.append(line)
@@ -83,7 +83,7 @@ function! browserlink#url2path(url)
 endfunction
 
 function! browserlink#getErrors()
-python <<EOF
+python3 <<EOF
 data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/errors").readlines()
 vim.command("let errors = %s" % [e.strip() for e in data])
 EOF
@@ -101,13 +101,13 @@ EOF
 endfunction
 
 function! browserlink#clearErrors()
-python <<EOF
+python3 <<EOF
 urllib2.urlopen(vim.eval("g:bl_serverpath") + "/clearerrors")
 EOF
 endfunction
 
 function! browserlink#traceLine()
-python <<EOF
+python3 <<EOF
 
 line = vim.eval("getline('.')")
 fragments = line.split('/')
