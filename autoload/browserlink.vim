@@ -27,6 +27,7 @@ function! browserlink#evaluateJS(js)
 python3 <<EOF
 data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read()
 while (len(data) is 0):
+  time.sleep(0.1)
   data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read()
 EOF
   call browserlink#getNetSuiteLogs()

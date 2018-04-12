@@ -4,8 +4,7 @@ function sendResultsToVim() {
 
   // harvest the output and send back to vim
   var executionLogRows = document.querySelector("#console_fs").querySelectorAll("tr");
-  // skip the metrics row
-  for (var i=1; i<=executionLogRows.length; i++) {
+  for (var i=0; i<=executionLogRows.length; i++) {
     var tr = executionLogRows[i];
     if (!tr) {
       continue;
