@@ -60,9 +60,13 @@ I prefer the GreaseMonkey/Userscript method, as it's more universal and I don't 
 
 ## Usage
 
-Once set up, Vim should now call the Node server whenever you save a .html, .js, .php, or .css file. Then just load up your web project like normal, and Vim should send signals over the websocket to reload the pages automatically. Nifty.
+Once set up, Vim should now call the Node server. Load up the debugger like normal, find some SuiteScript you want to execute, and issue the command to run it over the websocket against NetSuite. 
 
 This works very similarly to the original Browserlink plugin. Notable NetSuite-specific additions are:
+
+`:BLNetSuiteEval`
+
+synonymus with `:BLEvaluateBuffer`
 
 `:BLNetSuiteLogs`
 
@@ -95,7 +99,7 @@ This function can be easily tweaked to fit your needs/workflow, and I highly rec
 
 `g:bl_no_autoupdate` (defaults to true with this plugin)
 
-If set, Browserlink won't try to reload when you save respective files.
+If set, NetSuite Browserlink won't try to reload when you save respective files.
 
 `g:bl_no_eager`
 
@@ -117,7 +121,7 @@ quickfix list for pages not accessed via a file://-URL.
 `g:bl_pagefiletypes`
 
 A list of filetype strings that should trigger automatic page reloads on write.
-Defaults to `['html', 'javascript', 'php']`.
+Defaults to `['javascript']`.
 
 ## Notes
 
