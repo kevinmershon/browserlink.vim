@@ -63,7 +63,7 @@ endfunction
 function! browserlink#getNetSuiteLogs()
 python3 <<EOF
 data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read().decode()
-vim.command("let netsuitelogs = \"%s\"" % data)
+vim.command("let netsuitelogs = \"%s\"" % data.replace("\"","\\\""))
 EOF
   echo netsuitelogs
 endfunction
