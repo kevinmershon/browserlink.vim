@@ -50,7 +50,7 @@ function runScript(scriptBody) {
 
   // enter the script text
   document.querySelector('#mainscript').focus();
-  document.querySelector('#mainscript').value = scriptBody;
+  document.querySelector('#mainscript').value = scriptBody.replace(/\t/g, "\n");
 
   // start debugging
   document.querySelector('#debug').click();

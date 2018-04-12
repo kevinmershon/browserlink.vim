@@ -14,7 +14,7 @@ function! browserlink#EvaluateSelection()
 endfunction
 
 function! browserlink#EvaluateBuffer()
-	call browserlink#evaluateJS(join(getline(1,'$')," "))
+	call browserlink#evaluateJS(join(getline(1,'$'),"\t"))
 endfunction
 
 function! browserlink#EvaluateWord()
