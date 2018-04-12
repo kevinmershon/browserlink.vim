@@ -1,7 +1,7 @@
 # NetSuite Browserlink
 Based on the somewhat defunct [Browserlink.vim plugin](https://github.com/jaxbot/browserlink.vim), this is a live browser debugger plugin for NetSuite via Vim.
 
-[![NetSuite Browserlink](https://i.imgur.com/rpDOG1il.mp4)](https://i.imgur.com/rpDOG1i.mp4)
+![NetSuite Browserlink](https://i.imgur.com/uNIqcka.gif)
 
 ## How it works
 NetSuite Browserlink is very simple. The plugin itself hooks autocommands for file changes (and other things) to the provided functions. The functions connect through HTTP to a node.js backend, which your webpage connects also to. The entire process happens extremely fast.
