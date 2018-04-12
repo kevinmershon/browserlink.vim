@@ -1,27 +1,9 @@
 # NetSuite Browserlink
-Based on the Browserlink.vim plugin, this is a live browser debugger plugin for NetSuite via Vim.
+Based on the somewhat defunct [Browserlink.vim plugin](https://github.com/jaxbot/browserlink.vim), this is a live browser debugger plugin for NetSuite via Vim.
 <img src='http://jaxbot.me/pics/browserlink_html.gif'>
 
-## Live evaluate JavaScript
-
-Browserlink allows you to evaluate buffers or selections of JavaScript directly, or even call individual functions within the buffer, for instant feedback in the browser.
-
-<img src='http://jaxbot.me/pics/brolinkjs.gif'>
-
-## New: Keep in sync with Chrome Inspector
-
-The Chrome inspector allows you to set source maps from network resources to the local filesystem. In the latest version of Browserlink, you can set
-
-```
-window.__BL_OVERRIDE_CACHE = true
-```
-
-to disable the cache breaker. After setting up Chrome as desired, enable `:set autoread` and you'll get results like this:
-
-<img src='http://jaxbot.me/pics/vim/vim_brolink_sync.gif' alt='Browserlink.vim staying in sync with Chrome inspector'>
-
 ## How it works
-Browserlink is very simple. The plugin itself hooks autocommands for file changes (and other things) to the provided functions. The functions connect through HTTP to a node.js backend, which your webpage connects also to. The entire process happens extremely fast.
+NetSuite Browserlink is very simple. The plugin itself hooks autocommands for file changes (and other things) to the provided functions. The functions connect through HTTP to a node.js backend, which your webpage connects also to. The entire process happens extremely fast.
 
 ## Installation and Setup
 To install, either download the repo, or as I would recommend, use [Pathogen](https://github.com/tpope/vim-pathogen).
@@ -38,6 +20,7 @@ Lastly, you need some javascript on your page(s) to listen for the refresh comma
 
 ```
 <script src='http://127.0.0.1:9001/js/socket.js'></script>
+<script src='http://127.0.0.1:9001/js/netsuite.js'></script>
 ```
 
 2. **OR** Use a GreaseMonkey script to inject the javascript into your project:
@@ -78,52 +61,40 @@ I prefer the GreaseMonkey/Userscript method, as it's more universal and I don't 
 
 Once set up, Vim should now call the Node server whenever you save a .html, .js, .php, or .css file. Then just load up your web project like normal, and Vim should send signals over the websocket to reload the pages automatically. Nifty.
 
-In addition:
+This works very similarly to the original Browserlink plugin. Notable NetSuite-specific additions are:
+
+`:BLNetSuiteLogs`
+
+will echo recent debugger log output to a temporary vim buffer
+
+`:BLNetSuiteClear`
+
+will clear the debugger logs
+
+Standard to Browserlink:
 
 `:BLReloadPage`
 
-will reload the current pages
+will reload the current page
 
 `:BLEvaluateBuffer`
 
-will evaluate the current buffer
+will evaluate the current buffer against the debugger
 
-You can also use <leader>be to evaluate selections or buffers, <leader>br to reload, and <leader>bc to reload stylesheets manually.
+You can also use <leader>be to evaluate selections or buffers, <leader>br to reload.
 
-`:BLConsole`
 
-An experimental feature that will print out `console.log` results from the webpage into a buffer. When in console mode:
+If you want to get super efficient, you can hook an autocmd to when you leave insert mode (or other times) to reload:
 
-* `i` - shortcut to `:BLEval`
-* `cc` - clears console buffer
-* `r` - refreshes console buffer
-* `<CR>` - attempts to load the highlighted trace line
-
-If you want to disable the overriding of `console.log` on your page, set:
-
-```
-window.__BL_NO_CONSOLE_OVERRIDE = true
-```
-
-`:BLErrors`
-
-Load accumulated Javascript errors of the current session into the quickfix list
-
-`:BLClearErrors`
-
-Reset the error list.
-
-If you want to get super efficient, you can hook an autocmd to when you leave insert mode (or other times) to reload, say, the stylesheets:
-
-`au InsertLeave *.css :BLReloadCSS`
+`au InsertLeave *.css :BLEvaluateBuffer`
 
 This function can be easily tweaked to fit your needs/workflow, and I highly recommend you do so to maximize your utility from this plugin.
 
 ## Options
 
-`g:bl_no_autoupdate`
+`g:bl_no_autoupdate` (defaults to true with this plugin)
 
-If set, Browserlink won't try to reload pages/CSS when you save respective files.
+If set, Browserlink won't try to reload when you save respective files.
 
 `g:bl_no_eager`
 
