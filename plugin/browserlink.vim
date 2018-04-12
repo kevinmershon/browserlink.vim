@@ -54,7 +54,7 @@ function! s:setupHandlers()
 endfunction
 
 if !exists("g:bl_no_autoupdate")
-	call s:setupHandlers()
+  let g:bl_no_autoupdate = 1
 endif
 
 if !exists("g:bl_no_eager")
