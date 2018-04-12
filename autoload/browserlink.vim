@@ -22,7 +22,14 @@ function! browserlink#EvaluateWord()
 endfunction
 
 function! browserlink#evaluateJS(js)
+  call browserlink#sendCommand("clearNetSuite")
 	python3 urllib2.urlopen(urllib2.Request(vim.eval("g:bl_serverpath") + "/evaluate", ("runScript(\""+vim.eval("a:js").replace('"','\\"')+"\")").encode()))
+python3 <<EOF
+data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read()
+while (len(data) is 0):
+  data = urllib2.urlopen(vim.eval("g:bl_serverpath") + "/netsuite").read()
+EOF
+  call browserlink#getNetSuiteLogs()
 endfunction
 
 function! browserlink#sendCommand(command)

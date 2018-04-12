@@ -14,7 +14,7 @@ if !exists("g:bl_serverpath")
 endif
 
 if !exists("g:bl_pagefiletypes")
-	let g:bl_pagefiletypes = ["html", "javascript", "php"]
+	let g:bl_pagefiletypes = ["javascript"]
 endif
 
 let g:bl_state = 0
@@ -24,10 +24,10 @@ command!        -nargs=0 BLEvaluateBuffer    call browserlink#EvaluateBuffer()
 command!        -nargs=0 BLEvaluateWord      call browserlink#EvaluateWord()
 command!        -nargs=1 BLEval              call browserlink#evaluateJS(<f-args>)
 command!        -nargs=0 BLReloadPage        call browserlink#sendCommand("reload/page")
-command!        -nargs=0 BLReloadCSS         call browserlink#sendCommand("reload/css")
 command!        -nargs=0 BLConsoleClear      call browserlink#sendCommand("clear")
-command!        -nargs=0 BLNetSuiteClear     call browserlink#sendCommand("clearNetSuite")
 command!        -nargs=0 BLConsole           edit browserlink/console
+command!        -nargs=0 BLNetSuiteEval      call browserlink#EvaluateBuffer()
+command!        -nargs=0 BLNetSuiteClear     call browserlink#sendCommand("clearNetSuite")
 command!        -nargs=0 BLNetSuiteLogs      call browserlink#getNetSuiteLogs()
 command!        -nargs=0 BLErrors            call browserlink#getErrors()
 command!        -nargs=0 BLClearErrors       call browserlink#clearErrors()
@@ -39,7 +39,10 @@ if !exists("g:bl_no_mappings")
 	nmap <silent><Leader>be :BLEvaluateBuffer<CR>
 	nmap <silent><Leader>bf :BLEvaluateWord<CR>
 	nmap <silent><Leader>br :BLReloadPage<CR>
-	nmap <silent><Leader>bc :BLReloadCSS<CR>
+
+  " copy Vim-fireplace commands
+	nmap <silent>cqp :BLNetSuiteEval<CR>
+	nmap <silent>cpr :BLReloadPage<CR>
 endif
 
 function! s:autoReload()
@@ -50,7 +53,6 @@ endfunction
 
 function! s:setupHandlers()
 	au BufWritePost * call s:autoReload()
-	au BufWritePost *.css :BLReloadCSS
 endfunction
 
 if !exists("g:bl_no_autoupdate")

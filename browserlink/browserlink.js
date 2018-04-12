@@ -32,10 +32,12 @@ var server = http.createServer(function(request, response) {
 
 	switch (pieces[1]) {
 		case "reload":
+      netSuiteLogs = "";
 			broadcast(pieces[2]);
 			break;
 		case "evaluate":
 			request.on('data', function(data) {
+        netSuiteLogs = "";
 				broadcast(data);
 			});
 			break;
