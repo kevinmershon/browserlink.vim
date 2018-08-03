@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://127.0.0.1:9001/");
+var socket;
 
 function sendResultsToVim() {
   if (window.location.href.indexOf("scriptdebugger.nl") !== -1) {
@@ -49,37 +49,65 @@ function waitForSwitchToEditor() {
 }
 
 function runScript(scriptBody) {
+  if (!socket) {
+    return;
+  }
   const scriptExec = scriptBody.replace(/\t/g, "\n");
 
-  if (window.location.href.indexOf("scriptdebugger.nl") !== -1) {
-    // intelligently select API version
-    if (scriptBody.indexOf('require(') < 0) {
-      document.querySelector('#inpt_runtimeversion1').title = '1.0';
-      document.querySelector('#inpt_runtimeversion1').value = '1.0';
-      document.querySelector('#hddn_runtimeversion1').value = '1.0';
+  try {
+
+    if (window.location.href.indexOf("scriptdebugger.nl") !== -1) {
+      // intelligently select API version
+      if (scriptBody.indexOf('require(') < 0) {
+        document.querySelector('#inpt_runtimeversion1').title = '1.0';
+        document.querySelector('#inpt_runtimeversion1').value = '1.0';
+        document.querySelector('#hddn_runtimeversion1').value = '1.0';
+      } else {
+        document.querySelector('#inpt_runtimeversion1').title = '2.0';
+        document.querySelector('#inpt_runtimeversion1').value = '2.0';
+        document.querySelector('#hddn_runtimeversion1').value = '2.0';
+      }
+
+      // enter the script text
+      document.querySelector('#mainscript').focus();
+      document.querySelector('#mainscript').value = scriptExec;
+
+      // start debugging
+      document.querySelector('#debug').click();
+
+      // wait for the UI to update, then hit continue
+      setTimeout(function() {
+        document.querySelector('#continue').click();
+
+        // wait for the script to finish
+        setTimeout(waitForSwitchToEditor, 50);
+      }, 250);
     } else {
-      document.querySelector('#inpt_runtimeversion1').title = '2.0';
-      document.querySelector('#inpt_runtimeversion1').value = '2.0';
-      document.querySelector('#hddn_runtimeversion1').value = '2.0';
+      eval(scriptExec);
+      waitForSwitchToEditor();
     }
-
-    // enter the script text
-    document.querySelector('#mainscript').focus();
-    document.querySelector('#mainscript').value = scriptExec;
-
-    // start debugging
-    document.querySelector('#debug').click();
-
-    // wait for the UI to update, then hit continue
-    setTimeout(function() {
-      document.querySelector('#continue').click();
-
-      // wait for the script to finish
-      setTimeout(waitForSwitchToEditor, 50);
-    }, 250);
-  } else {
-    eval(scriptExec);
-    waitForSwitchToEditor();
+  } catch (ex) {
+    socket.send(JSON.stringify({
+      "type": "netsuite",
+      "message": {
+        "description": "ERROR",
+        "details":     ex.message
+      }
+    }));
   }
-
 }
+
+function startListening() {
+  socket = new WebSocket("ws://127.0.0.1:9001/");
+
+  console.logOriginal('%c -> NetSuite Browserlink enabled', 'color: red; font-weight: bold');
+  document.body.style.border = "2px solid red";
+}
+
+function stopListening() {
+  socket.close();
+  socket = null;
+  document.body.style.border = "";
+}
+
+startListening();

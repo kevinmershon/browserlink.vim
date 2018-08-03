@@ -52,15 +52,13 @@ netSuiteSrc.src = "http://127.0.0.1:9001/js/netsuite.js";
 netSuiteSrc.async = true;
 document.head.appendChild(netSuiteSrc);
 
-console.log('%c -> NetSuite Browserlink enabled', 'color: red; font-weight: bold');
-
 ```
 
 I prefer the GreaseMonkey/Userscript method, as it's more universal and I don't have extra development junk in my projects. But it's totally up to you.
 
 ## Usage
 
-Once set up, Vim should now call the Node server. Load up the debugger like normal, find some SuiteScript you want to execute, and issue the command to run it over the websocket against NetSuite. 
+Once set up, Vim should now call the Node server. Load up the debugger like normal, find some SuiteScript you want to execute, and issue the command to run it over the websocket against NetSuite.
 
 This works very similarly to the original Browserlink plugin. Notable NetSuite-specific additions are:
 
