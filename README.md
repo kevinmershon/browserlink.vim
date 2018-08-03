@@ -38,7 +38,7 @@ Userscript template (update the [@match rule](https://developer.chrome.com/exten
 // @namespace    NetSuiteLink
 // @include      *
 // @description  Vim BrowserLink remote debugging of NetSuite
-// @match        https://*.netsuite.com/app/common/scripting/scriptdebugger.nl*
+// @match        https://*.netsuite.com/app/*
 // @author       Kevin Mershon
 // ==/UserScript==
 
